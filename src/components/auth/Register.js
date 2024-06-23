@@ -112,9 +112,8 @@ const Register = (props) => {
     setMessage("");
     setSuccessful(false);
 
-    form.current.validateAll();
+    // form.current.validateAll();
 
-    if (checkBtn.current.context._errors.length === 0) {
       AuthService.register(phone, fullName, password, selectedCountry).then(
         (response) => {
           setMessage(response.data.message);
@@ -132,7 +131,7 @@ const Register = (props) => {
           setSuccessful(false);
         }
       );
-    }
+    
   };
 
   return (
@@ -162,12 +161,12 @@ const Register = (props) => {
                     Nhận miễn phí <strong>500,000đ</strong> để bắt đầu
                   </p>
                 </div>
-                <Form onSubmit={handleRegister} ref={form}>
+                <form onSubmit={handleRegister} ref={form}>
                   {!successful && (
                     <div>
                       <div className="form-group mb-3">
                         <div className="input-group">
-                          <Input
+                          <input
                             type="text"
                             className="form-control"
                             placeholder="Số điện thoại"
@@ -179,7 +178,7 @@ const Register = (props) => {
                         </div>
                       </div>
                       <div className="form-group mb-3">
-                        <Input
+                        <input
                           type="password"
                           className="form-control"
                           placeholder="Mật khẩu"
@@ -189,7 +188,7 @@ const Register = (props) => {
                         />
                       </div>
                       <div className="form-group mb-3">
-                        <Input
+                        <input
                           type="password"
                           className="form-control"
                           placeholder="Nhập lại mật khẩu"
@@ -199,7 +198,7 @@ const Register = (props) => {
                         />
                       </div>
                       <div className="form-group mb-3">
-                        <Input
+                        <input
                           type="text"
                           className="form-control"
                           placeholder="Tên đầy đủ"
@@ -253,8 +252,10 @@ const Register = (props) => {
                       </div>
                     </div>
                   )}
-                  <CheckButton style={{ display: "none" }} ref={checkBtn} />
-                </Form>
+                  
+                  {/* <checkButton style={{ display: "none" }} ref={checkBtn} /> */}
+
+                </form>
                 <div className="text-center mt-3">
                   <p>
                     Bạn đã có tài khoản? <a href="#">Đăng nhập</a>
