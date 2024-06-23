@@ -1,0 +1,32 @@
+:root{
+  --font-roboto: "Roboto", sans-serif;
+  --c-primary: #fcd535;
+  --c-second-primary : #57C478;
+  --c-dark: #181a20;
+  
+}
+body{
+  text-decoration: none;
+}
+
+.form-group .btn-register{
+  background-color: var(--c-primary);
+ 
+}
+
+
+
+.section-second{
+  background-color: var(--c-primary);
+  height: 100vh;
+}
+.tex{
+  color: #000000;
+}
+.header-register{
+  padding: 22px 102px;
+}
+.header-register img{
+  width: 60px;
+  height: 40px;
+}
