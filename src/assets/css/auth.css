@@ -17,7 +17,7 @@ body{
 
 
 .section-second{
-  background-color: var(--c-primary);
+  background-color: var( --c-primary);
   height: 100vh;
 }
 .tex{
@@ -29,4 +29,8 @@ body{
 .header-register img{
   width: 60px;
   height: 40px;
+}
+.custom-margin-logo {
+  margin-top: -30px;
+  margin-bottom: -25px; /* Điều chỉnh giá trị này theo nhu cầu */
 }
