@@ -7,6 +7,8 @@
 }
 body{
   text-decoration: none;
+  background-color: var(--c-dark);
+  color: #fff;
 }
 
 .form-group .btn-register{

@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/images/logo.png";
 import { fetchCountrys } from '../../services/CountryAPI';
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 import AuthService from "../../services/Auth";
 
 const required = (value) => {
@@ -45,12 +42,21 @@ const validPassword = (value) => {
     );
   }
 };
+const initFormValue = {
+  fullName: "",
+  phone: "",
+  password: "",
+  rePassword: "",
+  idCountry: "",
+}
+
 
 const Register = (props) => {
+  const [formValue, setFormValue] = useState(initFormValue);
+
   const [countrys, setCountrys] = useState([]);
   const [error, setError] = useState(null);
   const form = useRef();
-  const checkBtn = useRef();
 
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
@@ -61,8 +67,12 @@ const Register = (props) => {
   const [rePassword, setRePassword] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
 
+ 
   const onChangeFullName = (e) => {
-    const fullName = e.target.value;
+    const {value } = e.target;
+    setFormValue(
+      
+    )
     setFullName(fullName);
   };
 
@@ -82,7 +92,8 @@ const Register = (props) => {
   };
 
   const onChangeCountry = (event) => {
-    setSelectedCountry(event.target.value);
+    const country = event.target.value;
+    setSelectedCountry(country);
   };
 
   useEffect(() => {
@@ -108,18 +119,16 @@ const Register = (props) => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-
-    setMessage("");
-    setSuccessful(false);
-
+      setMessage("");
+      setSuccessful(false);
     // form.current.validateAll();
-
       AuthService.register(phone, fullName, password, selectedCountry).then(
         (response) => {
           setMessage(response.data.message);
           setSuccessful(true);
         },
         (error) => {
+          console.error(phone, fullName, password, selectedCountry);
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -133,6 +142,9 @@ const Register = (props) => {
       );
     
   };
+
+  
+
 
   return (
     <div className="container-fluid">
@@ -171,7 +183,7 @@ const Register = (props) => {
                             className="form-control"
                             placeholder="Số điện thoại"
                             name="phone"
-                            value={phone}
+                            value={formValue.phone}
                             onChange={onChangePhone}
                             validations={[required, validPhone]}
                           />
@@ -182,7 +194,7 @@ const Register = (props) => {
                           type="password"
                           className="form-control"
                           placeholder="Mật khẩu"
-                          value={password}
+                          value={formValue.password}
                           onChange={onChangePassword}
                           validations={[required, validPassword]}
                         />
@@ -192,7 +204,7 @@ const Register = (props) => {
                           type="password"
                           className="form-control"
                           placeholder="Nhập lại mật khẩu"
-                          value={rePassword}
+                          value={formValue.rePassword}
                           onChange={onChangeRePassword}
                           validations={[required, validPassword]}
                         />
@@ -202,7 +214,7 @@ const Register = (props) => {
                           type="text"
                           className="form-control"
                           placeholder="Tên đầy đủ"
-                          value={fullName}
+                          value={formValue.fullName}
                           onChange={onChangeFullName}
                           validations={[required, validFullName]}
                         />
@@ -210,9 +222,10 @@ const Register = (props) => {
                       <div className="form-group mb-3">
                         <select
                           className="form-control"
-                          value={selectedCountry}
+                          value={formValue.idCountry}
                           onChange={onChangeCountry}
                         >
+                          <option value="">Select a country</option>
                           <option value="240">Việt Nam</option>
                           {countrys && countrys.length > 0 && countrys
                             .filter((country) => country.id !== 240)
