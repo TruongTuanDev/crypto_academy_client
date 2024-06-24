@@ -1,6 +1,6 @@
 
 import Button from '@mui/material/Button';
-import Register from './components/auth/Register';
+import Login from './components/auth/Login';
 
 
 
@@ -8,7 +8,7 @@ import Register from './components/auth/Register';
 function App() {
   return (
     <div className="App">
-      <Register/>
+      <Login/>
     </div>
   );
 }
