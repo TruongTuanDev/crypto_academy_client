@@ -1,34 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/images/logo.png";
-import { fetchCountrys } from '../../services/CountryAPI';
+import investImg from "../../assets/images/icon-signup.png"
+import { fetchCountrys } from "../../services/CountryAPI";
 import AuthService from "../../services/Auth";
+import QR from "../../assets/images/QR.jpg";
+import apple from "../../assets/images/apple.svg";
+import android from "../../assets/images/google.svg";
+import axios from "axios";
+
 
 const required = (value) => {
   if (!value) {
     return (
-      <div className="invalid-feedback d-block">
-        Ô này không được để trống!
-      </div>
+      <div className="invalid-feedback d-block">Ô này không được để trống!</div>
     );
   }
 };
 
 const validFullName = (value) => {
   if (value.length < 3 || value.length > 20) {
-    return (
-      <div className="invalid-feedback d-block">
-        Tên không hợp lệ
-      </div>
-    );
+    return <div className="invalid-feedback d-block">Tên không hợp lệ</div>;
   }
 };
 
 const validPhone = (value) => {
   if (value.length < 10 || value.length > 12) {
     return (
-      <div className="invalid-feedback d-block">
-        Số điện thoại không hợp lệ
-      </div>
+      <div className="invalid-feedback d-block">Số điện thoại không hợp lệ</div>
     );
   }
 };
@@ -48,8 +46,7 @@ const initFormValue = {
   password: "",
   rePassword: "",
   idCountry: "",
-}
-
+};
 
 const Register = (props) => {
   const [formValue, setFormValue] = useState(initFormValue);
@@ -67,12 +64,8 @@ const Register = (props) => {
   const [rePassword, setRePassword] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
 
- 
   const onChangeFullName = (e) => {
-    const {value } = e.target;
-    setFormValue(
-      
-    )
+    const fullName = e.target.value;
     setFullName(fullName);
   };
 
@@ -117,34 +110,47 @@ const Register = (props) => {
     return <div>Error: {error.message}</div>;
   }
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-      setMessage("");
-      setSuccessful(false);
-    // form.current.validateAll();
-      AuthService.register(phone, fullName, password, selectedCountry).then(
-        (response) => {
-          setMessage(response.data.message);
-          setSuccessful(true);
-        },
-        (error) => {
-          console.error(phone, fullName, password, selectedCountry);
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+  // const handleRegister = (e) => {
+  //   e.preventDefault();
+  //   setMessage("");
+  //   setSuccessful(false);
+  //   // form.current.validateAll();
+  //   AuthService.register(phone, fullName, password, selectedCountry).then(
+  //     (response) => {
+  //       setMessage(response.data.message);
+  //       setSuccessful(true);
+  //     },
+  //     (error) => {
+  //       console.error(phone, fullName, password, selectedCountry);
+  //       const resMessage =
+  //         (error.response &&
+  //           error.response.data &&
+  //           error.response.data.message) ||
+  //         error.message ||
+  //         error.toString();
 
-          setMessage(resMessage);
-          setSuccessful(false);
-        }
-      );
-    
-  };
-
-  
-
+  //       setMessage(resMessage);
+  //       setSuccessful(false);
+  //     }
+  //   );
+  // };
+  async function handleRegister(event){
+    event.preventDefault();
+    try {
+      console.log('register'+ fullName, password,phone,selectedCountry)
+      await axios.post("http://localhost:8081/api/v1/users/register", {
+       fullName : fullName,
+       password : password,
+       phone : phone,
+       idCountry : selectedCountry
+      }).then(response => {
+        console.log(response.data);
+    })
+      alert("Chúc mừng bạn đăng ký thành công");
+    } catch (err) {
+      alert(err);
+    }
+  }
 
   return (
     <div className="container-fluid">
@@ -183,7 +189,7 @@ const Register = (props) => {
                             className="form-control"
                             placeholder="Số điện thoại"
                             name="phone"
-                            value={formValue.phone}
+                            value={phone}
                             onChange={onChangePhone}
                             validations={[required, validPhone]}
                           />
@@ -194,7 +200,7 @@ const Register = (props) => {
                           type="password"
                           className="form-control"
                           placeholder="Mật khẩu"
-                          value={formValue.password}
+                          value={password}
                           onChange={onChangePassword}
                           validations={[required, validPassword]}
                         />
@@ -204,7 +210,7 @@ const Register = (props) => {
                           type="password"
                           className="form-control"
                           placeholder="Nhập lại mật khẩu"
-                          value={formValue.rePassword}
+                          value={rePassword}
                           onChange={onChangeRePassword}
                           validations={[required, validPassword]}
                         />
@@ -214,7 +220,7 @@ const Register = (props) => {
                           type="text"
                           className="form-control"
                           placeholder="Tên đầy đủ"
-                          value={formValue.fullName}
+                          value={fullName}
                           onChange={onChangeFullName}
                           validations={[required, validFullName]}
                         />
@@ -222,18 +228,20 @@ const Register = (props) => {
                       <div className="form-group mb-3">
                         <select
                           className="form-control"
-                          value={formValue.idCountry}
+                          value={selectedCountry}
                           onChange={onChangeCountry}
                         >
                           <option value="">Select a country</option>
                           <option value="240">Việt Nam</option>
-                          {countrys && countrys.length > 0 && countrys
-                            .filter((country) => country.id !== 240)
-                            .map((country) => (
-                              <option key={country.id} value={country.id}>
-                                {country.native}
-                              </option>
-                            ))}
+                          {countrys &&
+                            countrys.length > 0 &&
+                            countrys
+                              .filter((country) => country.id !== 240)
+                              .map((country) => (
+                                <option key={country.id} value={country.id}>
+                                  {country.native}
+                                </option>
+                              ))}
                         </select>
                       </div>
                       <div className="form-group form-check mb-3">
@@ -243,13 +251,20 @@ const Register = (props) => {
                           id="termsCheck"
                           required
                         />
-                        <label className="form-check-label" htmlFor="termsCheck">
+                        <label
+                          className="form-check-label"
+                          htmlFor="termsCheck"
+                        >
                           Bằng việc đăng ký, bạn đồng ý với{" "}
-                          <a href="#">Điều khoản</a> và <a href="#">Quy định</a> của chúng tôi.
+                          <a href="#">Điều khoản</a> và <a href="#">Quy định</a>{" "}
+                          của chúng tôi.
                         </label>
                       </div>
                       <div className="form-group mb-3">
-                        <button type="submit" className="btn btn-register w-100">
+                        <button
+                          type="submit"
+                          className="btn btn-register w-100"
+                        >
                           Đăng ký tài khoản
                         </button>
                       </div>
@@ -258,16 +273,19 @@ const Register = (props) => {
                   {message && (
                     <div className="form-group">
                       <div
-                        className={successful ? "alert alert-success" : "alert alert-danger"}
+                        className={
+                          successful
+                            ? "alert alert-success"
+                            : "alert alert-danger"
+                        }
                         role="alert"
                       >
                         {message}
                       </div>
                     </div>
                   )}
-                  
-                  {/* <checkButton style={{ display: "none" }} ref={checkBtn} /> */}
 
+                  {/* <checkButton style={{ display: "none" }} ref={checkBtn} /> */}
                 </form>
                 <div className="text-center mt-3">
                   <p>
@@ -279,7 +297,39 @@ const Register = (props) => {
           </div>
         </div>
         <div className="col-md-6 section-second">
-          <h1 className="tex">Màn hình 2</h1>
+          <div className="row d-flex flex-column">
+            <div className="col-md-6 w-100 section-second-top mb-5">
+              <div class="d-flex flex-row justify-content-center m-3">
+                <div className="pe-4 me-4 border-end d-flex flex-column align-items-center">
+                  <p className="mb-0" style={{fontSize: 56  + 'px'}}>7 tỷ</p>
+                  <p className="mb-0">Người tin tưởng</p>
+                </div>
+                <div href="#" className="d-flex flex-column align-items-center">
+                  <p style={{fontSize: 56  + 'px'}} className="mb-0">hơn 200</p>
+                  <p className="mb-0">Quốc gia</p>
+                </div>
+              </div>
+              <div className="d-flex w-100 justify-content-center mt-4">
+                <img width="300px" height="190px" src={investImg}></img>
+              </div>  
+            </div>
+            <div className="col-md-6 w-100 section-second-bottom">
+                <div className="d-flex justify-content-center align-items-center text-center w-100">
+                    <p style={{fontSize: 24  + 'px'}}>Quét mã QR để tải ứng dụng ONUS</p>
+                </div>
+                <div className="container d-flex justify-content-center">
+                <div className="row ml-5">
+                  <div className="col-md-6 mr-5">
+                    <img width="164px" height="164px" src={QR}></img>
+                  </div>
+                  <div className="col-md-6 d-flex flex-column justify-content-center p-4">
+                    <img width="140px" className="mb-3" height="50px" src={apple}></img>
+                    <img width="140px" height="50px" src={android}></img>
+                  </div>
+                </div>
+                </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
