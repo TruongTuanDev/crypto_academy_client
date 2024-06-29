@@ -40,16 +40,9 @@ const validPassword = (value) => {
     );
   }
 };
-const initFormValue = {
-  fullName: "",
-  phone: "",
-  password: "",
-  rePassword: "",
-  idCountry: "",
-};
+
 
 const Register = (props) => {
-  const [formValue, setFormValue] = useState(initFormValue);
 
   const [countrys, setCountrys] = useState([]);
   const [error, setError] = useState(null);
@@ -141,6 +134,7 @@ const Register = (props) => {
       await axios.post("http://localhost:8081/api/v1/users/register", {
        fullName : fullName,
        password : password,
+       rePassword: rePassword,
        phone : phone,
        idCountry : selectedCountry
       }).then(response => {
