@@ -36,3 +36,9 @@ body{
   margin-top: -30px;
   margin-bottom: -25px; /* Điều chỉnh giá trị này theo nhu cầu */
 }
+.section-second-top{
+  height: 50vh;
+}
+.section-second-bottom{
+  height: 50vh;
+}
