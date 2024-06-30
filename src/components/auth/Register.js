@@ -6,7 +6,7 @@ import AuthService from "../../services/Auth";
 import QR from "../../assets/images/QR.jpg";
 import apple from "../../assets/images/apple.svg";
 import android from "../../assets/images/google.svg";
-import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 
 const required = (value) => {
@@ -56,6 +56,10 @@ const Register = (props) => {
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
+  const navigate = useNavigate();
+
+
+
 
   const onChangeFullName = (e) => {
     const fullName = e.target.value;
@@ -103,48 +107,32 @@ const Register = (props) => {
     return <div>Error: {error.message}</div>;
   }
 
-  // const handleRegister = (e) => {
-  //   e.preventDefault();
-  //   setMessage("");
-  //   setSuccessful(false);
-  //   // form.current.validateAll();
-  //   AuthService.register(phone, fullName, password, selectedCountry).then(
-  //     (response) => {
-  //       setMessage(response.data.message);
-  //       setSuccessful(true);
-  //     },
-  //     (error) => {
-  //       console.error(phone, fullName, password, selectedCountry);
-  //       const resMessage =
-  //         (error.response &&
-  //           error.response.data &&
-  //           error.response.data.message) ||
-  //         error.message ||
-  //         error.toString();
+  const handleRegister = (e) => {
+    e.preventDefault();
+    setMessage("");
+    setSuccessful(false);
+    // form.current.validateAll();
+    AuthService.register(phone, fullName, password,rePassword, selectedCountry).then(
+      (response) => {
+        setMessage(response.data.message);
+        setSuccessful(true);
+        alert("Đăng ký thành công")
+        navigate('/login');
+      },
+      (error) => {
+        console.error(phone, fullName, password, selectedCountry);
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-  //       setMessage(resMessage);
-  //       setSuccessful(false);
-  //     }
-  //   );
-  // };
-  async function handleRegister(event){
-    event.preventDefault();
-    try {
-      console.log('register'+ fullName, password,phone,selectedCountry)
-      await axios.post("http://localhost:8081/api/v1/users/register", {
-       fullName : fullName,
-       password : password,
-       rePassword: rePassword,
-       phone : phone,
-       idCountry : selectedCountry
-      }).then(response => {
-        console.log(response.data);
-    })
-      alert("Chúc mừng bạn đăng ký thành công");
-    } catch (err) {
-      alert(err);
-    }
-  }
+        setMessage(resMessage);
+        setSuccessful(false);
+      }
+    );
+  };
 
   return (
     <div className="container-fluid">

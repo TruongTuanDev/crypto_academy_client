@@ -161,7 +161,7 @@ const Login = (props) => {
                   <div className="form-group mb-3">
                     <button
                       type="submit"
-                      className="btn w-100 d-flex align-items-center justify-content-center border"
+                      className="btn w-100 d-flex align-items-center justify-content-center border custom-btn-text"
                     >
                       <img
                         src={GoogleIcon}
@@ -177,7 +177,7 @@ const Login = (props) => {
                   <div className="form-group mb-3">
                     <button
                       type="submit"
-                      className="btn w-100 d-flex align-items-center justify-content-center border"
+                      className="btn w-100 d-flex align-items-center justify-content-center border custom-btn-text"
                     >
                       <img
                         src={faceIcon}
