@@ -15,12 +15,15 @@ body{
   background-color: var(--c-primary);
  
 }
+.custom-btn-text {
+  color: white !important; /* Sử dụng !important để đảm bảo không bị ghi đè */
+}
 
 
 
 .section-second{
   background-color: var( --c-primary);
-  height: 100vh;
+  height: 100%;
 }
 .tex{
   color: #000000;
